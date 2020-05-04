@@ -19,9 +19,39 @@ server.get('/', (req, res) =>{
     res.json({api: 'api working and running.'});
 })
 server.get('/api/users', (req, res)=>{
+
     res.json(users);
 })
 
+server.get('/api/users:id', (req, res)=>{
+    let id = req.params.id;
+
+    if(id !== users.id ){
+        res.status(404).json({
+            message: "The User with the specified ID does not exist."
+        })
+    }else{
+    
+    res.json(id);
+    }
+})
+
+// get('/:id', (req, res) => {
+//     Guides.findById(req.params.id)
+//     .then(guide => {
+//         if (guide) {
+//             res.json(guide);
+//         } else {
+//             res.status(404).json({ message: "Could not find a guide by that ID" });
+//         }
+//     })
+//     .catch(err => {
+//         res.status(500),json({ message: 'failed to get guides', err });
+//     });
+// });
+
+
+//post
 server.post('/api/users', (req, res)=>{
     const newUser = req.body;
 
@@ -38,6 +68,33 @@ server.post('/api/users', (req, res)=>{
 }
 })
 
+//delete
+server.delete('/api/users/:id', (req, res)=>{
+    let userId = req.params.id;
+
+    if(userId !== users.id){
+        res.status(404).json({message: "The user with the specified ID does not exist."})
+    }
+    
+    else if(!usersId){
+        res.status(500).json({errorMessage: "The user could not be removed"})
+
+    }
+
+    else{
+        users = users.filter(users => users.id != id);
+
+    res.status(200).json(users)
+    }
+
+})
+
+//patch
+server.patch('/api/users/:id', (req, res)=>{
+    let patchID = req.body
 
 
+})
+
+//server listening
 server.listen(8000, ()=> console.log('\n== API IS RUNNING AND WORKED UP!==\n'))
